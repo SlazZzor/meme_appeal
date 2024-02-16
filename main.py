@@ -63,8 +63,8 @@ def check_appeal(index, key, proxy, token, answer, ip_link):
         if username == "Not robot":
             append_to_file("./data/success_accounts.txt", f"{key}:{proxy}:{username}:{token}")
         elif username:
-            requests.get(ip_link)
-            time.sleep(30)
+            #requests.get(ip_link)
+            #time.sleep(30)
             form = Form(index, proxy, username, token, account.address, answer)
             ok, success = form.login()
             if success:
