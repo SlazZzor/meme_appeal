@@ -16,10 +16,13 @@ def read_files():
     with open("./data/appeal_text.txt", encoding='utf-8', errors='ignore') as file:
         answers = [line.strip() for line in file if line.strip()]
 
+    with open("./data/ip_change_link.txt", encoding='utf-8', errors='ignore') as file:
+        ip_link = [line.strip() for line in file if line.strip()]
+    
     while len(proxies) < len(private_keys):
         proxies.append(random.choice(proxies))
 
-    return private_keys, tokens, proxies, answers
+    return private_keys, tokens, proxies, answers, ip_link
 
 def create_client(proxy: str) -> requests.Session:
     session = requests.Session()

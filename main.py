@@ -4,6 +4,7 @@ import time
 import random
 from eth_account import Account
 import threading
+import requests
 
 from loguru import logger
 from config import PAUSE, PAUSE_RETRIES
@@ -52,7 +53,7 @@ def check(index, key, proxy):
     time.sleep(random.randint(PAUSE[0], PAUSE[1]))
 
 
-def check_appeal(index, key, proxy, token, answer):
+def check_appeal(index, key, proxy, token, answer, ip_link):
     login = CheckStatus(index, key, proxy)
     username = login.execute()
     account = Account.from_key(key)
@@ -60,6 +61,8 @@ def check_appeal(index, key, proxy, token, answer):
     if username == "Not robot":
         append_to_file("./data/success_accounts.txt", f"{key}:{proxy}:{username}:{token}")
     elif username:
+        requests.get('ip_link')
+        time.sleep(30)
         form = Form(index, proxy, username, token, account.address, answer)
         ok, success = form.login()
         if success:
@@ -87,7 +90,7 @@ def check_if_form_is_working(form):
 
 def main():
     configuration()
-    private_keys, tokens, proxies, answers = read_files()
+    private_keys, tokens, proxies, answers, ip_link = read_files()
 
     print("Choose an option:")
     print("1. Run checker")
@@ -129,7 +132,7 @@ def main():
             return "not working"
 
         with ThreadPoolExecutor(max_workers=num_threads) as executor:
-            executor.map(check_appeal, indexes, private_keys, proxies, tokens, answers)
+            executor.map(check_appeal, indexes, private_keys, proxies, tokens, answers, ip_link)
 
 
 if __name__ == "__main__":
